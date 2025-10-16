@@ -1,20 +1,71 @@
-import { z } from 'zod';
+import { plainToInstance } from 'class-transformer';
+import {
+  IsEnum,
+  IsInt,
+  IsString,
+  validateSync,
+  IsOptional,
+} from 'class-validator';
 
-export const envSchema = z.object({
-  DB_HOST: z.string(),
-  DB_PORT: z.coerce.number().int().positive(),
-  DB_USER: z.string(),
-  DB_PASS: z.string(),
-  DB_NAME: z.string(),
-  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-});
+class EnvVars {
+  @IsEnum(['development', 'test', 'production'])
+  @IsOptional()
+  NODE_ENV!: string;
 
-export function validate(config: Record<string, unknown>) {
-  const parsed = envSchema.safeParse(config);
+  @IsInt()
+  @IsOptional()
+  PORT!: number;
 
-  if (!parsed.success) {
-    throw new Error(`Config validation error: ${parsed.error.message}`);
+  @IsString()
+  DB_HOST!: string;
+
+  @IsInt()
+  DB_PORT!: number;
+
+  @IsString()
+  DB_USER!: string;
+
+  @IsString()
+  DB_PASS!: string;
+
+  @IsString()
+  DB_NAME!: string;
+
+  @IsString()
+  JWT_SECRET!: string;
+
+  @IsString()
+  @IsOptional()
+  CORS_ORIGIN?: string;
+
+  // Email configuration
+  @IsString()
+  RESEND_API_KEY!: string;
+
+  @IsString()
+  EMAIL_FROM!: string;
+
+  @IsString()
+  @IsOptional()
+  FRONT?: string;
+
+  @IsString()
+  @IsOptional()
+  APP_NAME?: string;
+}
+
+export const validate = (config: Record<string, unknown>) => {
+  const validatedConfig = plainToInstance(EnvVars, config, {
+    enableImplicitConversion: true,
+  });
+
+  const errors = validateSync(validatedConfig, {
+    skipMissingProperties: false,
+  });
+
+  if (errors.length > 0) {
+    throw new Error(errors.toString());
   }
 
-  return parsed.data;
-}
+  return validatedConfig;
+};

@@ -1,27 +1,28 @@
 // Modulos Externos
-import {
-  BeforeInsert,
-  BeforeUpdate,
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-} from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import { IsEmail } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 //Modulos Internos
+import { UserRole } from './enums/user-role.enum';
 
 @Entity('users')
 export class User {
-  @PrimaryGeneratedColumn('uuid') id!: string;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
   @Column({ unique: true })
+  @IsEmail({}, { message: 'El email debe ser valido' })
   email!: string;
 
   @Column()
-  firstName!: string;
+  username!: string;
 
-  @Column()
-  lastName!: string;
+  @Column({ 
+    type: 'enum', 
+    enum: UserRole, 
+    default: UserRole.USER 
+  })
+  role!: UserRole;
 
   @Column({ default: false })
   deleted!: boolean;
@@ -29,34 +30,12 @@ export class User {
   @Column({ default: true })
   isActive!: boolean;
 
-  @Column({ select: false })
-  password!: string;
+  @Column({ default: false })
+  emailVerified!: boolean;
 
-  // Track if password has been hashed to avoid double hashing
-  private isPasswordHashed = false;
+  @Column({ type: 'varchar', nullable: true, select: false })
+  loginToken!: string | null;
 
-  @BeforeInsert()
-  async hashPasswordBeforeInsert() {
-    if (this.password && !this.isPasswordHashed) {
-      this.password = await bcrypt.hash(this.password, 10);
-      this.isPasswordHashed = true;
-    }
-  }
-
-  @BeforeUpdate()
-  async hashPasswordBeforeUpdate() {
-    // Only hash if password is being changed and hasn't been hashed yet
-    if (
-      this.password &&
-      !this.isPasswordHashed &&
-      !this.password.startsWith('$2b$')
-    ) {
-      this.password = await bcrypt.hash(this.password, 10);
-      this.isPasswordHashed = true;
-    }
-  }
-
-  async comparePassword(attempt: string): Promise<boolean> {
-    return await bcrypt.compare(attempt, this.password);
-  }
+  @Column({ type: 'timestamptz', nullable: true, select: false })
+  loginTokenExpires!: Date | null;
 }

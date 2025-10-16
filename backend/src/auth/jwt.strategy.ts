@@ -1,7 +1,10 @@
+// Modulos Externos
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
+
+// Modulos Internos
 import { UsersService } from '../users/users.service';
 import { User } from '../users/user.entity';
 
@@ -18,11 +21,16 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  async validate(payload: { sub: string; email: string }): Promise<User> {
+  async validate(payload: { sub: string; email: string; role: string }): Promise<User> {
     const user = await this.usersService.findOne(payload.sub);
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Usuario no encontrado');
     }
-    return user;
+    
+    if (!user.isActive) {
+      throw new UnauthorizedException('Usuario inactivo');
+    }
+    
+    return user; // Retorna el usuario completo con su rol
   }
 }

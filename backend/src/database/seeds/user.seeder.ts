@@ -1,13 +1,10 @@
 // Modulos Externos
 import { DataSource } from 'typeorm';
 import { faker } from '@faker-js/faker';
-import * as dotenv from 'dotenv';
 
 // Modulos Internos
 import ormConfig from '../../../orm.config';
 import { User } from '../../users/user.entity';
-
-dotenv.config();
 
 async function seed() {
   const dataSource = new DataSource(ormConfig as any);
@@ -22,14 +19,14 @@ async function seed() {
 
     for (let i = 0; i < usersToCreate; i++) {
       const user = new User();
-      user.firstName = faker.person.firstName();
-      user.lastName = faker.person.lastName();
-      user.email = faker.internet.email({
-        firstName: user.firstName,
-        lastName: user.lastName,
-      });
+      const firstName = faker.person.firstName();
+      const lastName = faker.person.lastName();
+      
+      user.username = faker.internet.username({ firstName, lastName });
+      user.email = faker.internet.email({ firstName, lastName });
       user.isActive = faker.datatype.boolean();
-      user.password = 'password123'; // Default password for seeded users
+      user.emailVerified = true; // Los usuarios del seed están pre-verificados
+      // No password needed - passwordless authentication
       users.push(user);
     }
 

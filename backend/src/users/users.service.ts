@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { faker } from '@faker-js/faker';
 
 // Modulos Internos
 import { User } from './user.entity';
@@ -104,6 +105,101 @@ export class UsersService {
         throw error;
       }
       throw new BadRequestException('Error deleting user');
+    }
+  }
+
+   /**
+   * Crea un usuario sin contraseña (passwordless) con username anónimo
+   */
+  async createPasswordlessUser(email: string): Promise<User> {
+    try {
+      const adjective = faker.word.adjective();
+      const noun = faker.word.noun();
+      const randomNum = faker.number.int({ min: 100, max: 999 });
+      const username = `${adjective}${noun}${randomNum}`.replace(/\s/g, '');
+      
+      const newUser = this.usersRepository.create({
+        email,
+        username,
+      });
+      return await this.usersRepository.save(newUser);
+    } catch (error) {
+      throw new BadRequestException('Error creating passwordless user');
+    }
+  }
+
+  /**
+   * Busca un usuario por email e incluye el token de login
+   */
+  async findByEmailWithLoginToken(email: string): Promise<User | null> {
+    try {
+      const queryBuilder = this.usersRepository.createQueryBuilder('user');
+      queryBuilder.addSelect('user.loginToken');
+      queryBuilder.addSelect('user.loginTokenExpires');
+      return queryBuilder
+        .where('user.email = :email', { email })
+        .andWhere('user.deleted = :deleted', { deleted: false })
+        .getOne();
+    } catch (error) {
+      throw new BadRequestException('Error finding user by email');
+    }
+  }
+
+  /**
+   * Busca un usuario por token de login
+   */
+  async findByLoginToken(token: string): Promise<User | null> {
+    try {
+      const queryBuilder = this.usersRepository.createQueryBuilder('user');
+      queryBuilder.addSelect('user.loginToken');
+      queryBuilder.addSelect('user.loginTokenExpires');
+      return queryBuilder
+        .where('user.loginToken = :token', { token })
+        .andWhere('user.deleted = :deleted', { deleted: false })
+        .getOne();
+    } catch (error) {
+      throw new BadRequestException('Error finding user by token');
+    }
+  }
+
+  /**
+   * Establece el token de login y su fecha de expiración
+   */
+  async setLoginToken(userId: string, token: string, expiresAt: Date): Promise<void> {
+    try {
+      await this.usersRepository.update(userId, {
+        loginToken: token,
+        loginTokenExpires: expiresAt,
+      });
+    } catch (error) {
+      throw new BadRequestException('Error setting login token');
+    }
+  }
+
+  /**
+   * Limpia el token de login después de usarlo
+   */
+  async clearLoginToken(userId: string): Promise<void> {
+    try {
+      await this.usersRepository.update(userId, {
+        loginToken: null,
+        loginTokenExpires: null,
+      });
+    } catch (error) {
+      throw new BadRequestException('Error clearing login token');
+    }
+  }
+
+  /**
+   * Marca el email del usuario como verificado
+   */
+  async markEmailAsVerified(userId: string): Promise<void> {
+    try {
+      await this.usersRepository.update(userId, {
+        emailVerified: true,
+      });
+    } catch (error) {
+      throw new BadRequestException('Error marking email as verified');
     }
   }
 }

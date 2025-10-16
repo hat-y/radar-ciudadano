@@ -65,10 +65,11 @@ export class UsersController {
    * Obtener un usuario por ID - Autenticado
    */
   @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.JEFATURA)
   @ApiBearerAuth('access-token')
   @ApiOperation({
     summary: 'Obtener usuario por ID',
-    description: '',
+    description: 'Obtiene usuario por ID',
   })
   @ApiResponse({ status: 200, description: 'Usuario encontrado' })
   @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
@@ -85,7 +86,7 @@ export class UsersController {
   @ApiBearerAuth('access-token')
   @ApiOperation({
     summary: 'Crear nuevo usuario',
-    description: '⚠️ Solo accesible por usuarios con rol JEFATURA',
+    description: ' Solo accesible por usuarios con rol JEFATURA',
   })
   @ApiResponse({ status: 201, description: 'Usuario creado exitosamente' })
   @ApiForbiddenResponse({
@@ -104,7 +105,7 @@ export class UsersController {
   @ApiBearerAuth('access-token')
   @ApiOperation({
     summary: 'Actualizar usuario',
-    description: '⚠️ Solo accesible por usuarios con rol JEFATURA',
+    description: 'Solo accesible por usuarios con rol JEFATURA',
   })
   @ApiResponse({ status: 200, description: 'Usuario actualizado exitosamente' })
   @ApiForbiddenResponse({
@@ -123,7 +124,7 @@ export class UsersController {
   @ApiBearerAuth('access-token')
   @ApiOperation({
     summary: 'Eliminar usuario',
-    description: '⚠️ Solo accesible por usuarios con rol JEFATURA',
+    description: 'Solo accesible por usuarios con rol JEFATURA',
   })
   @ApiResponse({ status: 200, description: 'Usuario eliminado exitosamente' })
   @ApiForbiddenResponse({

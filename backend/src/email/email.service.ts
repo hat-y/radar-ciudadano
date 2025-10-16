@@ -14,6 +14,7 @@ import {
   ROLE_TRANSLATIONS,
   RoleName,
 } from './constants/role-translations.constants';
+import { REPORT_NOTIFICATION_TEMPLATE } from './templates/report-notification.template';
 
 @Injectable()
 export class EmailService {
@@ -338,5 +339,33 @@ export class EmailService {
     }
 
     return template;
+  }
+
+  async sendReportNotification(
+    to: string,
+    reportData: {
+      reportId: number;
+      neighborhood: string;
+      localidad: string;
+      description: string;
+      category: string;
+      lat: number;
+      lng: number;
+      createdAt: Date;
+    },
+  ) {
+    const siteUrl = this.configService.getOrThrow<string>('FRONT');
+    const viewReportUrl = `${siteUrl}/reports/${reportData.reportId}`;
+    const aboutUsUrl = `${siteUrl}/about-us`;
+
+    const html = REPORT_NOTIFICATION_TEMPLATE(
+      reportData,
+      viewReportUrl,
+      siteUrl,
+      aboutUsUrl,
+    );
+
+    const subject = `🔔 Nuevo reporte en ${reportData.neighborhood}`;
+    return this.sendEmail(to, subject, html);
   }
 }

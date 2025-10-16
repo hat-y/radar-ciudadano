@@ -8,23 +8,38 @@ import {
   Param,
   Delete,
   Query,
+  Sse,
 } from '@nestjs/common';
+import { map, Observable } from 'rxjs';
 
 // Modulos Internos
 import { ReportsService } from './reports.service';
 import { CreateReportDto } from './dto/create-report.dto';
 import { UpdateReportDto } from './dto/update-report.dto';
+import { ReportsStream } from './event.stream';
+import { GeospatialService } from './geospatial.service';
 
 @Controller('reports')
 export class ReportsController {
-  constructor(private readonly reportsService: ReportsService) {}
+  constructor(
+    private readonly reportsService: ReportsService,
+    private readonly streamService: ReportsStream,
+    private readonly geospatialService: GeospatialService,
+  ) {}
 
   @Post()
   create(@Body() dto: CreateReportDto) {
     return this.reportsService.create(dto);
   }
 
-  @Get()
+  @Sse('stream')
+  stream(): Observable<MessageEvent> {
+    return this.streamService
+      .asObservable()
+      .pipe(map((data) => ({ data }) as MessageEvent));
+  }
+
+  @Get('nearby')
   findNearby(
     @Query('lat') lat: number,
     @Query('lng') lng: number,
@@ -51,5 +66,13 @@ export class ReportsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.reportsService.remove(+id);
+  }
+
+  @Get('neighborhoods/list')
+  getNeighborhoods() {
+    return {
+      neighborhoods: this.geospatialService.getAllNeighborhoods(),
+      total: this.geospatialService.getAllNeighborhoods().length,
+    };
   }
 }

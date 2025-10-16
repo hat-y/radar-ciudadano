@@ -31,6 +31,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from './enums/user-role.enum';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { SubscribeToNeighborhoodDto } from './dto/subscribe-neighborhood.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -162,5 +163,64 @@ export class UsersController {
       filename: file.filename,
       path: file.path,
     };
+  }
+
+  /**
+   * Suscribirse a notificaciones de un barrio
+   */
+  @UseGuards(JwtAuthGuard)
+  @Post(':id/subscriptions')
+  @ApiBearerAuth('access-token')
+  @ApiOperation({
+    summary: 'Suscribirse a notificaciones de un barrio',
+  })
+  subscribeToNeighborhood(
+    @Param('id') userId: string,
+    @Body() dto: SubscribeToNeighborhoodDto,
+  ) {
+    return this.usersService.subscribeToNeighborhood(userId, dto);
+  }
+
+  /**
+   * Obtener suscripciones de un usuario
+   */
+  @UseGuards(JwtAuthGuard)
+  @Get(':id/subscriptions')
+  @ApiBearerAuth('access-token')
+  @ApiOperation({
+    summary: 'Obtener suscripciones de un usuario',
+  })
+  getUserSubscriptions(@Param('id') userId: string) {
+    return this.usersService.getUserSubscriptions(userId);
+  }
+
+  /**
+   * Cancelar suscripción a un barrio
+   */
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id/subscriptions/:subscriptionId')
+  @ApiBearerAuth('access-token')
+  @ApiOperation({
+    summary: 'Cancelar suscripción a un barrio',
+  })
+  unsubscribeFromNeighborhood(
+    @Param('id') userId: string,
+    @Param('subscriptionId') subscriptionId: string,
+  ) {
+    return this.usersService.unsubscribeFromNeighborhood(
+      userId,
+      subscriptionId,
+    );
+  }
+
+  /**
+   * Obtener lista de barrios disponibles
+   */
+  @Get('neighborhoods/available')
+  @ApiOperation({
+    summary: 'Obtener lista de todos los barrios disponibles',
+  })
+  getAvailableNeighborhoods() {
+    return this.usersService.getAvailableNeighborhoods();
   }
 }

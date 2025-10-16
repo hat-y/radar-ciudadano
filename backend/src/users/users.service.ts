@@ -11,12 +11,18 @@ import { faker } from '@faker-js/faker';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { SubscribeToNeighborhoodDto } from './dto/subscribe-neighborhood.dto';
+import { NeighborhoodSubscription } from './entities/neighborhood-subscription.entity';
+import { GeospatialService } from '../reports/geospatial.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    @InjectRepository(NeighborhoodSubscription)
+    private subscriptionRepository: Repository<NeighborhoodSubscription>,
+    private geospatialService: GeospatialService,
   ) {}
 
   async findByEmail(email: string, withPassword = false): Promise<User | null> {
@@ -201,5 +207,90 @@ export class UsersService {
     } catch (error) {
       throw new BadRequestException('Error marking email as verified');
     }
+  }
+
+  /**
+   * Suscribir un usuario a notificaciones de un barrio
+   */
+  async subscribeToNeighborhood(
+    userId: string,
+    dto: SubscribeToNeighborhoodDto,
+  ) {
+    // Verificar que el usuario existe
+    const user = await this.findOne(userId);
+
+    // Verificar que el barrio existe
+    if (!this.geospatialService.neighborhoodExists(dto.neighborhoodName)) {
+      throw new BadRequestException(
+        `El barrio "${dto.neighborhoodName}" no existe`,
+      );
+    }
+
+    // Verificar si ya está suscrito
+    const existingSubscription = await this.subscriptionRepository.findOne({
+      where: {
+        userId,
+        neighborhoodName: dto.neighborhoodName,
+      },
+    });
+
+    if (existingSubscription) {
+      // Actualizar configuración existente
+      existingSubscription.emailNotifications =
+        dto.emailNotifications ?? existingSubscription.emailNotifications;
+      existingSubscription.pushNotifications =
+        dto.pushNotifications ?? existingSubscription.pushNotifications;
+      return this.subscriptionRepository.save(existingSubscription);
+    }
+
+    // Crear nueva suscripción
+    const subscription = this.subscriptionRepository.create({
+      userId,
+      neighborhoodName: dto.neighborhoodName,
+      emailNotifications: dto.emailNotifications ?? true,
+      pushNotifications: dto.pushNotifications ?? true,
+    });
+
+    return this.subscriptionRepository.save(subscription);
+  }
+
+  /**
+   * Obtener las suscripciones de un usuario
+   */
+  async getUserSubscriptions(userId: string) {
+    await this.findOne(userId); // Verificar que existe
+    return this.subscriptionRepository.find({
+      where: { userId },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  /**
+   * Cancelar suscripción a un barrio
+   */
+  async unsubscribeFromNeighborhood(
+    userId: string,
+    subscriptionId: string,
+  ) {
+    const subscription = await this.subscriptionRepository.findOne({
+      where: { id: subscriptionId, userId },
+    });
+
+    if (!subscription) {
+      throw new NotFoundException('Suscripción no encontrada');
+    }
+
+    await this.subscriptionRepository.remove(subscription);
+    return { message: 'Suscripción cancelada exitosamente' };
+  }
+
+  /**
+   * Obtener lista de barrios disponibles
+   */
+  getAvailableNeighborhoods() {
+    return {
+      neighborhoods: this.geospatialService.getAllNeighborhoods(),
+      total: this.geospatialService.getAllNeighborhoods().length,
+    };
   }
 }

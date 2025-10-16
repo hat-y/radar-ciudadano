@@ -1,0 +1,676 @@
+{
+  "type": "FeatureCollection",
+  "name": "renabap_barrios_formosa_capital",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Acceso A Curuzú La Novia",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-62.35500929449523, -37.32972299498086]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Laura Vicuña",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-56.61515825221888, -23.60074216211568]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Sagrado Corazón",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-57.048617906172744, -38.50339031340245]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "La Pilar",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-57.048617906172744, -38.50339031340245]
+      }
+    },
+
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Virgen de Pompeya",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Villa del Carmen"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-60.85283475568139, -28.643585434215836]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Acceso Tres Marías",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Villa del Carmen"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-62.58445560901183, -31.300342431300294]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Carlitos Menem Junior",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Villa del Carmen"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-55.998127467255365, -20.715634505345186]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Santa Isabel",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Villa del Carmen"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-60.85443339998464, -35.26456530516207]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Puente San Hilario",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Villa del Carmen"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-64.84469935102412, -34.7801812215278]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Villa del Carmen I",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Villa del Carmen"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-63.46624651621952, -33.699821691804836]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Villa del Carmen II",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Villa del Carmen"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-61.2559425949477, -23.983663560010097]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Lote Rural 222",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-56.832929885464665, -25.985487873569156]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "El Quebrachito",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-56.79965609749813, -25.29294262435264]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Sagrado Corazón de María",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-59.00054325778254, -33.63884561467799]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Doce de Octubre",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-61.64910061877886, -34.560882563350916]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Lote Rural 148",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-55.408394070551736, -38.506251283950405]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Villa Lourdes",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-55.071708751468385, -35.94574747441533]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "San Martín",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-62.581688869316906, -24.401260350622742]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "El Quebranto",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-55.26509676938039, -28.30583928391742]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Eva Perón",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-63.07339596627147, -36.89178897356127]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Simon Bolívar",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-58.55565641870218, -36.712500386004635]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Lote Rural 3 Bis",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-56.714501004548296, -30.678897751266767]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "La Delicia",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-56.98668353766647, -31.869748961815723]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "La Floresta",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-59.22146384201181, -29.28150901819953]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Laguna Siam",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-63.71129535590174, -20.707305554995425]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "La Palomita",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-58.6372650868884, -35.84727548779293]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "San Juan Bautista",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-55.22644365369434, -33.83384563574991]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "San José Obrero",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-63.26282729185231, -34.69984146170584]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Medalla Milagrosa",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-55.958286276599395, -37.60172887289213]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Santa Rosa",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-59.82722921979102, -36.84769245868968]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Villa Hermosa",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-60.62598412998248, -26.278903140989698]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "El Palomar",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-64.00422076061183, -23.472266241207006]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "El Porvenir",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-56.98828025711102, -26.062440335258472]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Fachini",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-59.957429534318095, -39.193403837826736]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "San Juan I",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-58.68558931522565, -23.281504980240275]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "San Antonio II",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-57.15718706011681, -33.44412682230416]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Stella Maris",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-63.48566893603599, -38.28502994528511]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Los Inmigrantes",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-56.861311481363714, -31.015932767610863]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Las Orquídeas",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-57.66439314956021, -20.144483525840425]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Urbanización Maroma",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-62.17400326342941, -22.653952020158112]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Veinticinco de Mayo",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-63.91695704666746, -28.501865565083705]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Itatí II",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-62.75939139888588, -34.77784988656122]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "San Juan II",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-55.24809405022175, -31.85730747785597]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Divino Niño",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-61.02651381707148, -37.87070087214847]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Lote 67",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-57.166350839150624, -23.723638615863074]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Lote 111",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-61.29176075152059, -33.123059697755544]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "San Isidro",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-58.008168857938, -32.541701279814674]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Urbanización San Isidro",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-55.89337898682854, -29.20266807444905]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "San Pío X",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-55.50035698818375, -33.968804609553516]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "Tiro Federal",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-56.07643923002726, -21.591320481162487]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre_barrio": "San Antonio I",
+        "provincia": "Formosa",
+        "departamento": "Formosa",
+        "localidad": "Formosa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-64.27036518498997, -30.011661683243787]
+      }
+    }
+  ]
+}

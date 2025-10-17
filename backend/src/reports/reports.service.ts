@@ -13,7 +13,12 @@ import { UpdateReportDto } from './dto/update-report.dto';
 import { ReportsStream } from './event.stream';
 import { GeospatialService } from './geospatial.service';
 import { NotificationService } from './notification.service';
-import { Report, ReportStatus } from './entities/report.entity';
+import {
+  Report,
+  ReportStatus,
+  ReportSeverity,
+  CrimeType,
+} from './entities/report.entity';
 import { Location } from '../locations/entities/location.entity';
 import * as ngeohash from 'ngeohash';
 
@@ -29,6 +34,45 @@ export class ReportsService {
     private readonly notificationService: NotificationService,
   ) {}
 
+  /**
+   * Determina la severidad según el tipo de delito
+   */
+  private determineSeverity(crimeType: CrimeType): ReportSeverity {
+    const criticalCrimes = [
+      CrimeType.ASESINATO,
+      CrimeType.SECUESTRO,
+      CrimeType.ABUSO_SEXUAL,
+    ];
+
+    const highCrimes = [
+      CrimeType.ROBO,
+      CrimeType.ROBO_VEHICULO,
+      CrimeType.ROBO_DOMICILIO,
+      CrimeType.LESIONES,
+      CrimeType.VIOLENCIA_GENERO,
+      CrimeType.NARCOTRAFICO,
+      CrimeType.EXTORSION,
+    ];
+
+    const mediumCrimes = [
+      CrimeType.HURTO,
+      CrimeType.AMENAZAS,
+      CrimeType.VANDALISMO,
+      CrimeType.TRAFICO_ARMAS,
+      CrimeType.CORRUPCION,
+    ];
+
+    if (criticalCrimes.includes(crimeType)) {
+      return ReportSeverity.CRITICA;
+    } else if (highCrimes.includes(crimeType)) {
+      return ReportSeverity.ALTA;
+    } else if (mediumCrimes.includes(crimeType)) {
+      return ReportSeverity.MEDIA;
+    } else {
+      return ReportSeverity.BAJA;
+    }
+  }
+
   async create(dto: CreateReportDto): Promise<Report> {
     // 1. Encontrar el barrio basado en las coordenadas
     const neighborhood = this.geospatialService.findNearestNeighborhood(
@@ -36,9 +80,12 @@ export class ReportsService {
       dto.lng,
     );
 
-    // 2. Buscar o crear Location
+    // 2. Determinar severidad automáticamente si no se especificó
+    const severity = dto.severity || this.determineSeverity(dto.crimeType);
+
+    // 3. Buscar o crear Location
     const geoHash = ngeohash.encode(dto.lat, dto.lng, 12);
-    
+
     let location = await this.locationRepo.findOne({
       where: { geoHash },
     });
@@ -56,9 +103,10 @@ export class ReportsService {
       location = await this.locationRepo.save(location);
     }
 
-    // 3. Crear Report vinculado a Location
+    // 4. Crear Report vinculado a Location
     const report = this.reportRepo.create({
       ...dto,
+      severity,
       locationId: location.id,
       neighborhoodName: neighborhood?.nombre_barrio,
       localidad: neighborhood?.localidad,
@@ -69,10 +117,10 @@ export class ReportsService {
 
     const savedReport = await this.reportRepo.save(report);
 
-    // 4. Emitir evento SSE cuando se crea un reporte
+    // 5. Emitir evento SSE cuando se crea un reporte
     this.streamService.emitCreated(savedReport);
 
-    // 5. Notificar a usuarios suscritos al barrio (async, no bloquear la respuesta)
+    // 6. Notificar a usuarios suscritos al barrio (async, no bloquear la respuesta)
     if (savedReport.neighborhoodName) {
       this.notificationService
         .notifyNeighborhoodSubscribers(savedReport)

@@ -15,21 +15,43 @@ import { Location } from '../../locations/entities/location.entity';
 import { Evidence } from './evidence.entity';
 
 export enum ReportStatus {
-  PENDING = 'pending',
-  IN_PROGRESS = 'in_progress',
-  RESOLVED = 'resolved',
-  REJECTED = 'rejected',
+  PENDING = 'pending',           // Pendiente de revisión
+  IN_INVESTIGATION = 'in_investigation', // En investigación
+  VERIFIED = 'verified',         // Verificado por autoridades
+  RESOLVED = 'resolved',         // Resuelto/Cerrado
+  DISMISSED = 'dismissed',       // Descartado (falsa alarma)
+}
+
+export enum CrimeType {
+  // Delitos contra la propiedad
+  HURTO = 'hurto',                    
+  ROBO = 'robo',                       
+  ROBO_VEHICULO = 'robo_vehiculo',    
+  ROBO_DOMICILIO = 'robo_domicilio',  
+  VANDALISMO = 'vandalismo',          
+  
+  // Delitos contra las personas
+  ASESINATO = 'asesinato',            
+  LESIONES = 'lesiones',              
+  AMENAZAS = 'amenazas',              
+  SECUESTRO = 'secuestro',            
+  ABUSO_SEXUAL = 'abuso_sexual',      
+  VIOLENCIA_GENERO = 'violencia_genero', 
+  
+  // Otros
+  ACTIVIDAD_SOSPECHOSA = 'actividad_sospechosa',
+  OTRO = 'otro',                      
 }
 
 export enum ReportSeverity {
-  LOW = 'low',
-  MEDIUM = 'medium',
-  HIGH = 'high',
-  URGENT = 'urgent',
+  BAJA = 'baja',           
+  MEDIA = 'media',         
+  ALTA = 'alta',           
+  CRITICA = 'critica',     
 }
 
 @Entity('reports')
-@Index(['lat', 'lng']) // Búsquedas geoespaciales
+@Index(['lat', 'lng']) 
 export class Report {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -60,12 +82,20 @@ export class Report {
   @Column({
     type: 'enum',
     enum: ReportSeverity,
-    default: ReportSeverity.MEDIUM,
+    default: ReportSeverity.MEDIA,
   })
   severity!: ReportSeverity;
 
+  // Tipo de delito
+  @Column({
+    type: 'enum',
+    enum: CrimeType,
+  })
+  @Index()
+  crimeType!: CrimeType;
+
   @Column({ nullable: true })
-  category?: string;
+  category?: string; // Mantener para compatibilidad, deprecated
 
   @Column({ nullable: true })
   neighborhoodName?: string;

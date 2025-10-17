@@ -1,7 +1,11 @@
 import axios from 'axios'
 import { SecureTokenStorage } from '../utils/SecureTokenStorage'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/'
+// In development with Vite proxy, use relative URLs
+// In production, use the full API URL
+const API_URL = import.meta.env.PROD
+  ? import.meta.env.VITE_API_URL || 'http://localhost:3000'
+  : ''
 
 const axiosInstance = axios.create({
   baseURL: API_URL,

@@ -47,21 +47,12 @@ export function Navbar() {
           </Text>
           <Group gap="sm" visibleFrom="lg">
             <Button
-              variant="default"
               size="lg"
               className={classes.menuItem}
               component={Link}
               to="/login"
             >
-              Iniciar Sesión
-            </Button>
-            <Button
-              size="lg"
-              className={classes.menuItem}
-              component={Link}
-              to="/register"
-            >
-              Registrarse
+              Ingresar
             </Button>
           </Group>
 
@@ -91,24 +82,13 @@ export function Navbar() {
 
           <Group justify="center" grow pb="xl" px="md">
             <Button
-              variant="default"
               radius="xs"
               className={classes.menuItem}
               component={Link}
               to="/login"
               onClick={closeDrawer}
             >
-              Iniciar Sesión
-            </Button>
-            <Button
-              color="#1A2E50"
-              radius="xs"
-              className={classes.menuItem}
-              component={Link}
-              to="/register"
-              onClick={closeDrawer}
-            >
-              Registrarse
+              Ingresar
             </Button>
           </Group>
         </ScrollArea>

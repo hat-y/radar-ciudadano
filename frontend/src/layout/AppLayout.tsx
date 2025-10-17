@@ -1,32 +1,29 @@
-import { AppShell, Burger, Group, Skeleton } from '@mantine/core'
+import { AppShell, Burger, Group, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { useAuthService } from '../hooks/useAuthService'
-import { BottomNav } from '../components'
 import { Outlet } from 'react-router-dom'
 import { Sidebar } from '../components/Sidebar'
 
 export function AppLayout() {
-  const { isAuthenticated, isLoading } = useAuthService()
   const [opened, { toggle }] = useDisclosure()
-
-  if (isLoading) {
-    return <Skeleton height="100vh" />
-  }
-
-  if (!isAuthenticated) {
-    return <Outlet />
-  }
 
   return (
     <AppShell
       header={{ height: 60 }}
-      navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !opened } }}
-      padding="md"
+      navbar={{ width: 280, breakpoint: 'sm', collapsed: { mobile: !opened } }}
     >
       <AppShell.Header>
-        <Group h="100%" px="md">
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-          <div>LOGO</div>
+        <Group h="100%" px="md" justify="space-between">
+          <Group>
+            <Burger
+              opened={opened}
+              onClick={toggle}
+              hiddenFrom="sm"
+              size="sm"
+            />
+            <Text size="lg" fw={700}>
+              RADAR CIUDADANO
+            </Text>
+          </Group>
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p="md">
@@ -35,9 +32,6 @@ export function AppLayout() {
       <AppShell.Main>
         <Outlet />
       </AppShell.Main>
-      <MediaQuery smallerThan="sm" styles={{ width: '100%' }}>
-        <BottomNav />
-      </MediaQuery>
     </AppShell>
   )
 }

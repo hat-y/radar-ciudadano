@@ -15,9 +15,8 @@ export class AuthRepository {
   }
 
   async verifyLogin(credentials: VerifyLoginRequest): Promise<LoginResponse> {
-    const { data } = await axiosInstance.post<LoginResponse>(
-      '/auth/verify-login',
-      credentials
+    const { data } = await axiosInstance.get<LoginResponse>(
+      `/auth/verify-login?token=${credentials.token}`
     )
     return data
   }

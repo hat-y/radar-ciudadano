@@ -1,17 +1,17 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Navbar, Footer, Hero, Features, CTA } from '../components';
-import { useAuthService } from '../hooks/useAuthService';
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Navbar, Footer, Hero, Features, CTA } from '../components'
+import { useAuthService } from '../hooks/useAuthService'
 
 export default function LandingPage() {
-  const { isAuthenticated } = useAuthService();
-  const navigate = useNavigate();
+  const { isAuthenticated } = useAuthService()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/app/map');
+      navigate('/map')
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate])
 
   return (
     <div
@@ -27,5 +27,5 @@ export default function LandingPage() {
 
       <Footer />
     </div>
-  );
+  )
 }

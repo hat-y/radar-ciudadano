@@ -1,56 +1,77 @@
-import { NavLink } from 'react-router-dom';
-import { Button, Group } from '@mantine/core';
-import { IconHome, IconUser, IconSettings, IconLogout } from '@tabler/icons-react';
-import { useAuthService } from '../hooks/useAuthService';
+import { NavLink } from 'react-router-dom'
+import { Button, Stack, Divider, Text } from '@mantine/core'
+import {
+  IconMap,
+  IconMessages,
+  IconChartBar,
+  IconLogout,
+} from '@tabler/icons-react'
+import { useAuthService } from '../hooks/useAuthService'
 
 export function Sidebar() {
-    const { logout } = useAuthService();
+  const { logout, isAuthenticated, user } = useAuthService()
 
-    return (
-        <div>
-            <NavLink to="/app/map">
-                {({ isActive }) => (
-                    <Button
-                        variant={isActive ? 'light' : 'subtle'}
-                        leftSection={<IconHome size={16} />}
-                        fullWidth
-                    >
-                        Mapa
-                    </Button>
-                )}
-            </NavLink>
-            <NavLink to="/app/profile">
-                {({ isActive }) => (
-                    <Button
-                        variant={isActive ? 'light' : 'subtle'}
-                        leftSection={<IconUser size={16} />}
-                        fullWidth
-                    >
-                        Perfil
-                    </Button>
-                )}
-            </NavLink>
-            <NavLink to="/app/settings">
-                {({ isActive }) => (
-                    <Button
-                        variant={isActive ? 'light' : 'subtle'}
-                        leftSection={<IconSettings size={16} />}
-                        fullWidth
-                    >
-                        Configuración
-                    </Button>
-                )}
-            </NavLink>
-            <Group grow style={{ marginTop: 'auto' }}>
-                <Button
-                    variant="subtle"
-                    leftSection={<IconLogout size={16} />}
-                    onClick={logout}
-                    fullWidth
-                >
-                    Cerrar Sesión
-                </Button>
-            </Group>
-        </div>
-    );
+  return (
+    <Stack justify="space-between" h="100%">
+      <Stack gap="xs">
+        <NavLink to="/map" style={{ textDecoration: 'none' }}>
+          {({ isActive }) => (
+            <Button
+              variant={isActive ? 'light' : 'subtle'}
+              leftSection={<IconMap size={18} />}
+              fullWidth
+              justify="flex-start"
+            >
+              Mapa
+            </Button>
+          )}
+        </NavLink>
+
+        <NavLink to="/chat" style={{ textDecoration: 'none' }}>
+          {({ isActive }) => (
+            <Button
+              variant={isActive ? 'light' : 'subtle'}
+              leftSection={<IconMessages size={18} />}
+              fullWidth
+              justify="flex-start"
+            >
+              Chat
+            </Button>
+          )}
+        </NavLink>
+
+        <NavLink to="/stats" style={{ textDecoration: 'none' }}>
+          {({ isActive }) => (
+            <Button
+              variant={isActive ? 'light' : 'subtle'}
+              leftSection={<IconChartBar size={18} />}
+              fullWidth
+              justify="flex-start"
+            >
+              Estadísticas
+            </Button>
+          )}
+        </NavLink>
+      </Stack>
+
+      {isAuthenticated && (
+        <Stack gap="xs">
+          <Divider />
+          <Text size="xs" c="dimmed" px="sm">
+            {user?.email || 'Usuario'}
+          </Text>
+          <Button
+            variant="subtle"
+            color="red"
+            leftSection={<IconLogout size={18} />}
+            onClick={logout}
+            fullWidth
+            justify="flex-start"
+          >
+            Cerrar Sesión
+          </Button>
+        </Stack>
+      )}
+    </Stack>
+  )
 }

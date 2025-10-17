@@ -1,17 +1,13 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { AppLayout } from '../layout/AppLayout';
-
-function MapPage() {
-    return <div>Map placeholder</div>;
-}
+import { Navigate } from 'react-router-dom'
+import { useAuthService } from '../hooks/useAuthService'
+import ReportIncidentPage from '../pages/ReportIncidentPage'
 
 export function ProtectedRoutes() {
-    return (
-        <AppLayout>
-            <Routes>
-                <Route path="/app/map" element={<MapPage />} />
-                <Route path="/" element={<Navigate to="/app/map" />} />
-            </Routes>
-        </AppLayout>
-    );
+  const { isAuthenticated } = useAuthService()
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />
+  }
+
+  return <ReportIncidentPage />
 }

@@ -56,9 +56,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (credentials: LoginRequest): Promise<AuthUser> => {
     setIsLoading(true)
     try {
-      const userData = await authService.login(credentials)
-      setUser(userData)
-      return userData
+      // For email-only login, this is just a stub
+      // The actual flow is: requestLogin -> verifyLogin
+      // This method is kept for compatibility with AuthContext interface
+      await authService.requestLogin(credentials)
+      throw new Error('Please check your email for the login token')
     } finally {
       setIsLoading(false)
     }

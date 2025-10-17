@@ -18,7 +18,7 @@ export function BottomNav({ onOpenMap }: Props) {
         borderTop: '1px solid #eee',
       }}
     >
-      <Group position="apart">
+      <Group justify="space-between">
         <ActionIcon variant="light" size="lg">
           <IconHome />
         </ActionIcon>

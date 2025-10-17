@@ -6,7 +6,7 @@ export interface AuthContextType {
   authService: AuthService
   user: AuthUser | null
   isAuthenticated: boolean
-  login: (credentials: { email: string; password: string }) => Promise<AuthUser>
+  login: (credentials: { email: string }) => Promise<AuthUser>
   logout: () => Promise<void>
   isLoading: boolean
 }

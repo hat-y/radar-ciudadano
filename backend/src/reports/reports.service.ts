@@ -50,16 +50,12 @@ export class ReportsService {
       CrimeType.ROBO_DOMICILIO,
       CrimeType.LESIONES,
       CrimeType.VIOLENCIA_GENERO,
-      CrimeType.NARCOTRAFICO,
-      CrimeType.EXTORSION,
     ];
 
     const mediumCrimes = [
       CrimeType.HURTO,
       CrimeType.AMENAZAS,
       CrimeType.VANDALISMO,
-      CrimeType.TRAFICO_ARMAS,
-      CrimeType.CORRUPCION,
     ];
 
     if (criticalCrimes.includes(crimeType)) {
@@ -74,16 +70,13 @@ export class ReportsService {
   }
 
   async create(dto: CreateReportDto): Promise<Report> {
-    // 1. Encontrar el barrio basado en las coordenadas
-    const neighborhood = this.geospatialService.findNearestNeighborhood(
+    const neighborhood = await this.geospatialService.findNearestNeighborhood(
       dto.lat,
       dto.lng,
     );
 
-    // 2. Determinar severidad automáticamente si no se especificó
     const severity = dto.severity || this.determineSeverity(dto.crimeType);
 
-    // 3. Buscar o crear Location
     const geoHash = ngeohash.encode(dto.lat, dto.lng, 12);
 
     let location = await this.locationRepo.findOne({
@@ -103,7 +96,6 @@ export class ReportsService {
       location = await this.locationRepo.save(location);
     }
 
-    // 4. Crear Report vinculado a Location
     const report = this.reportRepo.create({
       ...dto,
       severity,
@@ -117,10 +109,8 @@ export class ReportsService {
 
     const savedReport = await this.reportRepo.save(report);
 
-    // 5. Emitir evento SSE cuando se crea un reporte
     this.streamService.emitCreated(savedReport);
 
-    // 6. Notificar a usuarios suscritos al barrio (async, no bloquear la respuesta)
     if (savedReport.neighborhoodName) {
       this.notificationService
         .notifyNeighborhoodSubscribers(savedReport)

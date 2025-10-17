@@ -69,10 +69,11 @@ export class ReportsController {
   }
 
   @Get('neighborhoods/list')
-  getNeighborhoods() {
+  async getNeighborhoods() {
+    const neighborhoods = await this.geospatialService.getAllNeighborhoods();
     return {
-      neighborhoods: this.geospatialService.getAllNeighborhoods(),
-      total: this.geospatialService.getAllNeighborhoods().length,
+      neighborhoods,
+      total: neighborhoods.length,
     };
   }
 }

@@ -220,7 +220,8 @@ export class UsersService {
     const user = await this.findOne(userId);
 
     // Verificar que el barrio existe
-    if (!this.geospatialService.neighborhoodExists(dto.neighborhoodName)) {
+    const neighborhoodExists = await this.geospatialService.neighborhoodExists(dto.neighborhoodName);
+    if (!neighborhoodExists) {
       throw new BadRequestException(
         `El barrio "${dto.neighborhoodName}" no existe`,
       );
@@ -287,10 +288,11 @@ export class UsersService {
   /**
    * Obtener lista de barrios disponibles
    */
-  getAvailableNeighborhoods() {
+  async getAvailableNeighborhoods() {
+    const neighborhoods = await this.geospatialService.getAllNeighborhoods();
     return {
-      neighborhoods: this.geospatialService.getAllNeighborhoods(),
-      total: this.geospatialService.getAllNeighborhoods().length,
+      neighborhoods,
+      total: neighborhoods.length,
     };
   }
 }

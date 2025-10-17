@@ -68,6 +68,9 @@ export class NotificationService {
     }
   }
 
+  /**
+   * Envía email de notificación a un suscriptor
+   */
   private async sendReportNotification(email: string, report: any) {
     return this.emailService.sendReportNotification(email, {
       reportId: report.id,

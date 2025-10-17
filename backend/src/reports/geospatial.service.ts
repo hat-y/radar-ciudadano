@@ -1,121 +1,84 @@
 import { Injectable, Logger } from '@nestjs/common';
-import * as fs from 'fs/promises';
-import * as path from 'path';
+import { NeighborhoodsService } from '../locations/neighborhoods.service';
 
-interface NeighborhoodFeature {
-  type: 'Feature';
-  properties: {
-    nombre_barrio: string;
-    provincia: string;
-    departamento: string;
-    localidad: string;
-  };
-  geometry: {
-    type: 'Point';
-    coordinates: [number, number]; // [lng, lat]
-  };
-}
-
-interface NeighborhoodData {
-  type: 'FeatureCollection';
-  features: NeighborhoodFeature[];
+interface NeighborhoodResult {
+  nombre_barrio: string;
+  provincia?: string;
+  departamento?: string;
+  localidad?: string;
 }
 
 @Injectable()
 export class GeospatialService {
   private readonly logger = new Logger(GeospatialService.name);
-  private neighborhoods: NeighborhoodFeature[] = [];
-  private readonly MAX_DISTANCE_KM = 1; // Radio máximo para considerar que está en el barrio
+  private readonly MAX_DISTANCE_KM = 50;
+
+  constructor(private readonly neighborhoodsService: NeighborhoodsService) {}
 
   async onModuleInit() {
-    await this.loadNeighborhoods();
-  }
-
-  private async loadNeighborhoods() {
-    try {
-      // Buscar el archivo en diferentes ubicaciones posibles
-      const possiblePaths = [
-        '/app/barrios_formosa_capital.json', // Docker (primero)
-        path.join(process.cwd(), 'barrios_formosa_capital.json'), // En el mismo directorio
-        path.join(process.cwd(), '..', 'barrios_formosa_capital.json'), // Desde backend/ -> raíz
-        path.join(__dirname, '..', '..', '..', 'barrios_formosa_capital.json'), // Desde dist/
-      ];
-
-      let filePath: string | null = null;
-      let data: string | null = null;
-
-      // Intentar cada ruta
-      for (const possiblePath of possiblePaths) {
-        try {
-          data = await fs.readFile(possiblePath, 'utf-8');
-          filePath = possiblePath;
-          this.logger.log(`Found GeoJSON file at: ${filePath}`);
-          break;
-        } catch {
-          continue;
-        }
-      }
-
-      if (!data || !filePath) {
-        this.logger.error(
-          'No se pudo encontrar barrios_formosa_capital.json. Rutas intentadas:',
-        );
-        possiblePaths.forEach((p) => this.logger.error(`  - ${p}`));
-        this.neighborhoods = [];
-        return;
-      }
-
-      const geojson: NeighborhoodData = JSON.parse(data);
-      this.neighborhoods = geojson.features;
-      this.logger.log(
-        `✓ Loaded ${this.neighborhoods.length} neighborhoods from ${filePath}`,
-      );
-    } catch (error) {
-      this.logger.error('Failed to load neighborhoods:', error);
-      this.neighborhoods = [];
-    }
+    // Ya no necesitamos cargar del JSON, los barrios están en la DB
+    const count = (await this.neighborhoodsService.findAll()).length;
+    this.logger.log(`✓ GeospatialService initialized with ${count} neighborhoods from database`);
   }
 
   /**
-   * Encuentra el barrio más cercano a las coordenadas dadas
+   * Encuentra el barrio que contiene las coordenadas dadas
+   * Primero intenta punto-en-polígono, luego busca por cercanía
    * @param lat Latitud del reporte
    * @param lng Longitud del reporte
    * @returns Información del barrio o null si está fuera del radio
    */
-  findNearestNeighborhood(
+  async findNearestNeighborhood(
     lat: number,
     lng: number,
-  ): NeighborhoodFeature['properties'] | null {
-    if (this.neighborhoods.length === 0) {
-      this.logger.warn('No neighborhoods loaded');
+  ): Promise<NeighborhoodResult | null> {
+    try {
+      // Primero intentar encontrar por punto-en-polígono
+      const neighborhood = await this.neighborhoodsService.findByPoint(lat, lng);
+
+      if (neighborhood) {
+        this.logger.log(
+          `Found neighborhood by point-in-polygon: ${neighborhood.name}`,
+        );
+        return {
+          nombre_barrio: neighborhood.name,
+          provincia: neighborhood.provincia,
+          departamento: neighborhood.departamento,
+          localidad: neighborhood.localidad,
+        };
+      }
+
+      // Si no está dentro de ningún polígono, buscar por cercanía
+      const nearby = await this.neighborhoodsService.findNearby(
+        lat,
+        lng,
+        this.MAX_DISTANCE_KM,
+      );
+
+      if (nearby.length > 0) {
+        const nearest = nearby[0];
+        const distance = nearest.distanceToCenter(lat, lng);
+        
+        this.logger.log(
+          `Found nearest neighborhood: ${nearest.name} (${distance.toFixed(2)}km away)`,
+        );
+        
+        return {
+          nombre_barrio: nearest.name,
+          provincia: nearest.provincia,
+          departamento: nearest.departamento,
+          localidad: nearest.localidad,
+        };
+      }
+
+      this.logger.warn(
+        `No neighborhood found within ${this.MAX_DISTANCE_KM}km for coordinates (${lat}, ${lng})`,
+      );
+      return null;
+    } catch (error) {
+      this.logger.error('Error finding neighborhood:', error);
       return null;
     }
-
-    let nearest: NeighborhoodFeature | null = null;
-    let minDistance = Infinity;
-
-    for (const neighborhood of this.neighborhoods) {
-      const [nLng, nLat] = neighborhood.geometry.coordinates;
-      const distance = this.calculateDistance(lat, lng, nLat, nLng);
-
-      if (distance < minDistance) {
-        minDistance = distance;
-        nearest = neighborhood;
-      }
-    }
-
-    // Si el barrio más cercano está dentro del radio, retornarlo
-    if (nearest && minDistance <= this.MAX_DISTANCE_KM) {
-      this.logger.log(
-        `Found neighborhood: ${nearest.properties.nombre_barrio} (${minDistance.toFixed(2)}km away)`,
-      );
-      return nearest.properties;
-    }
-
-    this.logger.warn(
-      `No neighborhood found within ${this.MAX_DISTANCE_KM}km (nearest: ${minDistance.toFixed(2)}km)`,
-    );
-    return null;
   }
 
   /**
@@ -145,16 +108,16 @@ export class GeospatialService {
   /**
    * Obtiene la lista de todos los barrios disponibles
    */
-  getAllNeighborhoods(): string[] {
-    return this.neighborhoods.map((n) => n.properties.nombre_barrio).sort();
+  async getAllNeighborhoods(): Promise<string[]> {
+    const neighborhoods = await this.neighborhoodsService.findAll();
+    return neighborhoods.map((n) => n.name).sort();
   }
 
   /**
    * Verifica si un barrio existe
    */
-  neighborhoodExists(name: string): boolean {
-    return this.neighborhoods.some(
-      (n) => n.properties.nombre_barrio.toLowerCase() === name.toLowerCase(),
-    );
+  async neighborhoodExists(name: string): Promise<boolean> {
+    const neighborhood = await this.neighborhoodsService.findByName(name);
+    return neighborhood !== null;
   }
 }

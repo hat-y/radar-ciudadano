@@ -19,7 +19,7 @@ async function bootstrap() {
 
     // Enable CORS with better security
     app.enableCors({
-      origin: process.env.CORS_ORIGIN?.split(',') || ['http://localhost:5173', ],
+      origin: process.env.CORS_ORIGIN?.split(',') || ['http://localhost:5173'],
       credentials: true,
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
       allowedHeaders: ['Content-Type', 'Authorization'],
@@ -47,7 +47,9 @@ async function bootstrap() {
     // Configuración de Swagger
     const config = new DocumentBuilder()
       .setTitle('Mirage API')
-      .setDescription('API Documentation for Mirage - Passwordless Authentication System')
+      .setDescription(
+        'API Documentation for Mirage - Passwordless Authentication System',
+      )
       .setVersion('1.0')
       .addTag('auth', 'Endpoints de autenticación')
       .addTag('users', 'Gestión de usuarios')

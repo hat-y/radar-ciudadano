@@ -14,7 +14,10 @@
     "prebuild": "rimraf dist",
     "migration:gen": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -d orm.config.ts src/migrations/Init",
     "migration:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d orm.config.ts",
-    "migration:revert": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d orm.config.ts"
+    "migration:revert": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d orm.config.ts",
+    "seed": "ts-node -r tsconfig-paths/register src/database/seeds/data.seeder.ts",
+    "seed:users": "ts-node -r tsconfig-paths/register src/database/seeds/user.seeder.ts",
+    "seed:neighborhoods": "ts-node -r tsconfig-paths/register src/database/seeds/neighborhoods.seeder.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

@@ -33,5 +33,5 @@ export class CreateReportDto {
 
   @IsOptional()
   @IsString()
-  category?: string; // Deprecated, mantener compatibilidad
+  category?: string; 
 }

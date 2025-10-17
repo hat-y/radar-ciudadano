@@ -15,22 +15,20 @@ import { Location } from '../../locations/entities/location.entity';
 import { Evidence } from './evidence.entity';
 
 export enum ReportStatus {
-  PENDING = 'pending',           // Pendiente de revisión
-  IN_INVESTIGATION = 'in_investigation', // En investigación
-  VERIFIED = 'verified',         // Verificado por autoridades
-  RESOLVED = 'resolved',         // Resuelto/Cerrado
-  DISMISSED = 'dismissed',       // Descartado (falsa alarma)
+  PENDING = 'pending',           
+  IN_INVESTIGATION = 'in_investigation', 
+  VERIFIED = 'verified',         
+  RESOLVED = 'resolved',         
+  DISMISSED = 'dismissed',       
 }
 
 export enum CrimeType {
-  // Delitos contra la propiedad
   HURTO = 'hurto',                    
   ROBO = 'robo',                       
   ROBO_VEHICULO = 'robo_vehiculo',    
   ROBO_DOMICILIO = 'robo_domicilio',  
   VANDALISMO = 'vandalismo',          
   
-  // Delitos contra las personas
   ASESINATO = 'asesinato',            
   LESIONES = 'lesiones',              
   AMENAZAS = 'amenazas',              
@@ -38,7 +36,6 @@ export enum CrimeType {
   ABUSO_SEXUAL = 'abuso_sexual',      
   VIOLENCIA_GENERO = 'violencia_genero', 
   
-  // Otros
   ACTIVIDAD_SOSPECHOSA = 'actividad_sospechosa',
   OTRO = 'otro',                      
 }
@@ -62,7 +59,6 @@ export class Report {
   @Column('text')
   description!: string;
 
-  // Lat/Lng desnormalizado para queries rápidas (mantener compatibilidad)
   @Column('decimal', { precision: 10, scale: 7 })
   @Index()
   lat!: number;
@@ -95,7 +91,7 @@ export class Report {
   crimeType!: CrimeType;
 
   @Column({ nullable: true })
-  category?: string; // Mantener para compatibilidad, deprecated
+  category?: string; 
 
   @Column({ nullable: true })
   neighborhoodName?: string;

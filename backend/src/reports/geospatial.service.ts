@@ -18,7 +18,9 @@ export class GeospatialService {
   async onModuleInit() {
     // Ya no necesitamos cargar del JSON, los barrios están en la DB
     const count = (await this.neighborhoodsService.findAll()).length;
-    this.logger.log(`✓ GeospatialService initialized with ${count} neighborhoods from database`);
+    this.logger.log(
+      `GeospatialService initialized with ${count} neighborhoods from database`,
+    );
   }
 
   /**
@@ -34,7 +36,10 @@ export class GeospatialService {
   ): Promise<NeighborhoodResult | null> {
     try {
       // Primero intentar encontrar por punto-en-polígono
-      const neighborhood = await this.neighborhoodsService.findByPoint(lat, lng);
+      const neighborhood = await this.neighborhoodsService.findByPoint(
+        lat,
+        lng,
+      );
 
       if (neighborhood) {
         this.logger.log(
@@ -58,11 +63,11 @@ export class GeospatialService {
       if (nearby.length > 0) {
         const nearest = nearby[0];
         const distance = nearest.distanceToCenter(lat, lng);
-        
+
         this.logger.log(
           `Found nearest neighborhood: ${nearest.name} (${distance.toFixed(2)}km away)`,
         );
-        
+
         return {
           nombre_barrio: nearest.name,
           provincia: nearest.provincia,

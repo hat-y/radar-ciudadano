@@ -58,3 +58,7 @@ local/
 
 # ESLint config (not needed in container)
 eslint.config.mjs
+
+# JSON seed files (executed manually outside Docker)
+barrios_formosa_capital.json
+*.geojson

@@ -25,6 +25,12 @@ export class UsersService {
     private geospatialService: GeospatialService,
   ) {}
 
+  /**
+   * Busca un usuario por email
+   * @param email Email del usuario
+   * @param withPassword Si debe incluir la contraseña en el resultado
+   * @returns El usuario o null si no se encuentra
+   */
   async findByEmail(email: string, withPassword = false): Promise<User | null> {
     try {
       const queryBuilder = this.usersRepository.createQueryBuilder('user');
@@ -37,6 +43,10 @@ export class UsersService {
     }
   }
 
+  /**
+   * Obtiene todos los usuarios no eliminados
+   * @returns Todos los usuarios no eliminados
+   */
   async findAll(): Promise<User[]> {
     try {
       return await this.usersRepository.find({ where: { deleted: false } });
@@ -45,6 +55,11 @@ export class UsersService {
     }
   }
 
+  /**
+   * Busca un usuario por ID
+   * @param id ID del usuario
+   * @returns El usuario o lanza excepción si no se encuentra
+   */
   async findOne(id: string): Promise<User> {
     try {
       const user = await this.usersRepository.findOneBy({ id, deleted: false });
@@ -60,6 +75,11 @@ export class UsersService {
     }
   }
 
+  /**
+   * Crea un nuevo usuario
+   * @param createUserDto Datos del usuario
+   * @returns El usuario creado
+   */
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
       const existingUser = await this.findByEmail(createUserDto.email);
@@ -76,6 +96,12 @@ export class UsersService {
     }
   }
 
+  /**
+   * Actualiza un usuario
+   * @param id ID del usuario
+   * @param updateUserDto Datos del usuario a actualizar
+   * @returns El usuario actualizado
+   */
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     try {
       const user = await this.findOne(id);
@@ -101,6 +127,11 @@ export class UsersService {
     }
   }
 
+  /**
+   * Elimina un usuario (soft delete)
+   * @param id ID del usuario
+   * @returns El ID del usuario eliminado
+   */
   async remove(id: string): Promise<{ id: string }> {
     try {
       const user = await this.findOne(id);

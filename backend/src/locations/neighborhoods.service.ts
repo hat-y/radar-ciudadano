@@ -146,9 +146,11 @@ export class NeighborhoodsService {
       .createQueryBuilder('n')
       .where(
         "(n.geoBounds->>'minLat')::float <= :lat AND (n.geoBounds->>'maxLat')::float >= :lat",
+        { lat }
       )
       .andWhere(
         "(n.geoBounds->>'minLng')::float <= :lng AND (n.geoBounds->>'maxLng')::float >= :lng",
+        { lng }
       )
       .getMany();
 

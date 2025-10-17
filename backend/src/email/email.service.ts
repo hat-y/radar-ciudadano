@@ -237,7 +237,7 @@ export class EmailService {
           </div>
           
           <div class="warning">
-            <strong>⚠️ Importante:</strong> Si no solicitaste este enlace, ignora este email. 
+            <strong>Importante:</strong> Si no solicitaste este enlace, ignora este email. 
             Nunca compartas este enlace con nadie. Este enlace solo funcionará una vez.
           </div>
           

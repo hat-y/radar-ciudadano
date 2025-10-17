@@ -18,6 +18,7 @@ import {
   ReportStatus,
   ReportSeverity,
   CrimeType,
+  Evidence,
 } from './entities/report.entity';
 import { Location } from '../locations/entities/location.entity';
 import * as ngeohash from 'ngeohash';
@@ -29,6 +30,8 @@ export class ReportsService {
     private readonly reportRepo: Repository<Report>,
     @InjectRepository(Location)
     private readonly locationRepo: Repository<Location>,
+    @InjectRepository(Evidence)
+    private readonly evidenceRepo: Repository<Evidence>,
     private readonly streamService: ReportsStream,
     private readonly geospatialService: GeospatialService,
     private readonly notificationService: NotificationService,
@@ -118,6 +121,30 @@ export class ReportsService {
     }
 
     return savedReport;
+  }
+
+  async addEvidences(
+    reportId: number,
+    files: Express.Multer.File[],
+  ): Promise<Report> {
+    const report = await this.findOne(reportId);
+
+    if (!files || files.length === 0) {
+      throw new BadRequestException('No files uploaded');
+    }
+
+    const evidences = files.map((file) =>
+      this.evidenceRepo.create({
+        report,
+        url: file.path,
+        type: file.mimetype.startsWith('image') ? 'IMAGE' : 'VIDEO',
+      }),
+    );
+
+    await this.evidenceRepo.save(evidences);
+
+    // Recargar la relación para devolver el reporte actualizado
+    return this.findOne(reportId);
   }
 
   async findAll(): Promise<Report[]> {

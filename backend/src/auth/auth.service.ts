@@ -26,7 +26,9 @@ export class AuthService {
   ) {}
 
   /**
-   * Request login - Genera un link y lo envía por email
+   * Solicita login - Genera un magic link y lo envía por email
+   * @param requestLoginDto Datos de solicitud de login (email)
+   * @returns Mensaje de confirmación
    */
   async requestLogin(
     requestLoginDto: RequestLoginDto,
@@ -90,7 +92,9 @@ export class AuthService {
   }
 
   /**
-   * Verify login - Verifica el token del link y retorna el JWT
+   * Verifica el login - Valida el token del magic link y retorna el JWT
+   * @param token Token del magic link
+   * @returns Usuario autenticado y token de acceso JWT
    */
   async verifyLogin(
     token: string,
@@ -153,6 +157,7 @@ export class AuthService {
 
   /**
    * Genera un token único y seguro para el Magic Link
+   * @returns Token hexadecimal de 64 caracteres
    */
   private generateLoginToken(): string {
     const randomBytes = require('crypto').randomBytes(32);
@@ -160,7 +165,9 @@ export class AuthService {
   }
 
   /**
-   * Genera un JWT token para el usuario
+   * Genera un JWT token para el usuario autenticado
+   * @param user Usuario autenticado
+   * @returns Token JWT válido por 7 días
    */
   private async generateJwtToken(user: User): Promise<string> {
     try {

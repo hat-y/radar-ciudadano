@@ -19,8 +19,8 @@ interface GeoJSONFeature {
     localidad: string;
   };
   geometry: {
-    type: 'Polygon';
-    coordinates: number[][][]; // [[[lng, lat], [lng, lat], ...]]
+    type: 'Point' | 'Polygon';
+    coordinates: number[] | number[][][]; // Point: [lng, lat] | Polygon: [[[lng, lat], ...]]
   };
 }
 
@@ -75,7 +75,7 @@ export async function seedNeighborhoods(dataSource: DataSource) {
     const existingCount = await neighborhoodRepo.count();
     if (existingCount > 0) {
       console.log(`Clearing ${existingCount} existing neighborhoods...`);
-      await neighborhoodRepo.delete({});
+      await neighborhoodRepo.clear();
       console.log('   [SUCCESS] Table cleared\n');
     }
 
@@ -88,25 +88,54 @@ export async function seedNeighborhoods(dataSource: DataSource) {
       try {
         const { nombre_barrio, provincia, departamento, localidad } = feature.properties;
 
-        // Extraer el polígono (primer anillo exterior)
-        // GeoJSON Polygon: [[[lng, lat], [lng, lat], ...]]
-        const polygon = feature.geometry.coordinates[0];
+        let polygon: number[][];
+        let center: { lat: number; lng: number };
+        let geoBounds: { minLat: number; maxLat: number; minLng: number; maxLng: number };
 
-        // Calcular bounding box
-        const lngs = polygon.map((coord) => coord[0]);
-        const lats = polygon.map((coord) => coord[1]);
-        const geoBounds = {
-          minLat: Math.min(...lats),
-          maxLat: Math.max(...lats),
-          minLng: Math.min(...lngs),
-          maxLng: Math.max(...lngs),
-        };
+        // Verificar si es Point o Polygon
+        if (feature.geometry.type === 'Point') {
+          // Es un punto - generar polígono aproximado (cuadrado de ~500m alrededor del punto)
+          const [lng, lat] = feature.geometry.coordinates as number[];
+          const offset = 0.005; // Aproximadamente 500 metros
 
-        // Calcular centro (centroide simple)
-        const center = {
-          lng: (geoBounds.minLng + geoBounds.maxLng) / 2,
-          lat: (geoBounds.minLat + geoBounds.maxLat) / 2,
-        };
+          // Crear polígono cuadrado alrededor del punto
+          polygon = [
+            [lng - offset, lat - offset], // Esquina inferior izquierda
+            [lng + offset, lat - offset], // Esquina inferior derecha
+            [lng + offset, lat + offset], // Esquina superior derecha
+            [lng - offset, lat + offset], // Esquina superior izquierda
+            [lng - offset, lat - offset], // Cerrar polígono
+          ];
+
+          center = { lat, lng };
+          geoBounds = {
+            minLat: lat - offset,
+            maxLat: lat + offset,
+            minLng: lng - offset,
+            maxLng: lng + offset,
+          };
+
+          console.log(`   ⚠ ${nombre_barrio}: Point detected, generated approximate polygon`);
+        } else {
+          // Es un polígono real - usar coordenadas del GeoJSON
+          polygon = (feature.geometry.coordinates as number[][][])[0];
+
+          // Calcular bounding box
+          const lngs = polygon.map((coord) => coord[0]);
+          const lats = polygon.map((coord) => coord[1]);
+          geoBounds = {
+            minLat: Math.min(...lats),
+            maxLat: Math.max(...lats),
+            minLng: Math.min(...lngs),
+            maxLng: Math.max(...lngs),
+          };
+
+          // Calcular centro (centroide simple)
+          center = {
+            lng: (geoBounds.minLng + geoBounds.maxLng) / 2,
+            lat: (geoBounds.minLat + geoBounds.maxLat) / 2,
+          };
+        }
 
         // Crear neighborhood
         const neighborhood = neighborhoodRepo.create({

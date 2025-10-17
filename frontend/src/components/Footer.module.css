@@ -1,0 +1,23 @@
+.footer {
+    margin-top: rem(60px);
+    padding: var(--mantine-spacing-md);
+    background-color: #2f4a8d;
+    color: white;
+    border-top: rem(1px) solid #2f4a8d;
+  }
+  
+  .inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  
+    @media (max-width: 755px) {
+      flex-direction: column;
+    }
+  }
+  
+  .social {
+    @media (max-width: 755px) {
+      margin-top: var(--mantine-spacing-xs);
+    }
+  }

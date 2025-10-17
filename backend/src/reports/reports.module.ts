@@ -9,13 +9,16 @@ import { ReportsStream } from './event.stream';
 import { GeospatialService } from './geospatial.service';
 import { NotificationService } from './notification.service';
 import { Report } from './entities/report.entity';
+import { Evidence } from './entities/evidence.entity';
 import { NeighborhoodSubscription } from '../users/entities/neighborhood-subscription.entity';
 import { EmailModule } from '../email/email.module';
+import { LocationsModule } from '../locations/locations.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Report, NeighborhoodSubscription]),
+    TypeOrmModule.forFeature([Report, Evidence, NeighborhoodSubscription]),
     EmailModule,
+    LocationsModule,
   ],
   controllers: [ReportsController],
   providers: [

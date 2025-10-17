@@ -46,7 +46,9 @@ export class AuthService {
         user = await this.usersService.createPasswordlessUser(email);
         this.logger.debug(`✅ Usuario creado con ID: ${user.id}`);
       } else {
-        this.logger.debug(`👤 Usuario existente: ${user.email} (ID: ${user.id})`);
+        this.logger.debug(
+          `👤 Usuario existente: ${user.email} (ID: ${user.id})`,
+        );
         this.logger.debug(`Email verificado: ${user.emailVerified}`);
       }
 
@@ -61,7 +63,7 @@ export class AuthService {
       await this.usersService.setLoginToken(user.id, loginToken, expiresAt);
 
       const frontUrl =
-        this.configService.get<string>('FRONT') || 'http://localhost:3000';
+        this.configService.get<string>('FRONT') || 'http://localhost:5173';
       const magicLink = `${frontUrl}/auth/verify?token=${loginToken}`;
 
       this.logger.log(`🔗 Magic Link generado para: ${email}`);
@@ -71,7 +73,7 @@ export class AuthService {
         email,
         magicLink,
       );
-      
+
       this.logger.log(`✉️ Email enviado a: ${email}`);
       this.logger.debug('='.repeat(80));
 
@@ -109,7 +111,9 @@ export class AuthService {
         throw new UnauthorizedException('Link inválido o expirado');
       }
 
-      this.logger.debug(`✅ Usuario encontrado: ${user.email} (ID: ${user.id})`);
+      this.logger.debug(
+        `✅ Usuario encontrado: ${user.email} (ID: ${user.id})`,
+      );
       this.logger.debug(`Email verificado: ${user.emailVerified}`);
       this.logger.debug(`Token expira: ${user.loginTokenExpires}`);
 
@@ -160,8 +164,8 @@ export class AuthService {
    */
   private async generateJwtToken(user: User): Promise<string> {
     try {
-      const payload = { 
-        email: user.email, 
+      const payload = {
+        email: user.email,
         sub: user.id,
         role: user.role, // Incluir el rol en el JWT
       };
